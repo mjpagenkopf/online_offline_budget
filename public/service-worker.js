@@ -11,6 +11,7 @@ const FILES_TO_CACHE = [
   "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
   'https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css',
   "https://cdn.jsdelivr.net/npm/chart.js@2.8.0",
+  "https://use.fontawesome.com/releases/v5.8.2/css/all.css",
 ];
 
 self.addEventListener(`install`, evt => {

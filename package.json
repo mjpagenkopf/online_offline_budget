@@ -1,45 +1,38 @@
 {
-  "name": "react_app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "budget-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "lite-server": "lite-server",
+    "webpack": "webpack",
+    "prestart": "npm run webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coding-boot-camp/unit18hw.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/coding-boot-camp/unit18hw/issues"
+  },
+  "homepage": "https://github.com/coding-boot-camp/unit18hw#readme",
   "dependencies": {
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
     "compression": "^1.7.4",
     "express": "^4.17.1",
-    "lite-server": "^2.6.1",
-    "mongoose": "^5.13.2",
-    "morgan": "^1.10.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-scripts": "4.0.3",
-    "web-vitals": "^1.1.2"
+    "lite-server": "^2.5.3",
+    "mongoose": "^5.5.15",
+    "morgan": "^1.9.1"
   },
-  "scripts": {
-    "start": "npm start",
-    "build": "react-scripts build",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "eject": "react-scripts eject",
-    "lite-server": "lite-server"
-  },
-  "main": "server.js",
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "webpack": "^4.32.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-pwa-manifest": "^4.0.0",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.6"
   }
 }
