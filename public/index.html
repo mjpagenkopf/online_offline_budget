@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="theme-color" content="#317EFB">
-  <link rel="shortcut icon" href="icons/icon-192x192.png" type="image/x-icon">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <link href="https://fonts.googleapis.com/css?family=Istok+Web|Montserrat:800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="shortcut icon" href="./dist/assets/icons/icon_192x192.png" type="image/x-icon">
+  <link rel="stylesheet" href="./assets/css/styles.css">
+  <link rel="manifest" href="./dist/manifest.json">
+  
 
   <title>Budget Tracker</title>
 </head>
@@ -18,30 +21,55 @@
       <div class="total">Your total is: $<span id="total">0</span></div>
     </div>
 
-    <div class="form">
-      <input type="text" id="t-name" placeholder="Name of transaction" />
-      <input type="number" min="0" id="t-amount" placeholder="Transaction amount" />
+<form class="form">
+  <input type="text" id="t-name" placeholder="Name of transaction" />
+    <input type="number" min="0" id="t-amount" placeholder="Transaction amount" />
       <button id="add-btn"><i class="fa fa-plus buttons"></i> Add Funds</button>
       <button id="sub-btn"><i class="fa fa-minus"></i> Subtract Funds</button>
-      <p class="error"></p>
+    <p class="error"></p>
+</form>
+<div class="col-sm-6">
+  <div class="card">
+    <div class="card-body">
+      <div class="transactions">
+        <table>
+          <thead>
+            <th>Transaction</th>
+            <th>Amount</th>
+          </thead>
+           <tbody id="tbody">
+          </tbody>
+        </table>
+      </div>
     </div>
-
-    <div class="transactions">
-      <table>
-        <thead>
-          <th>Transaction</th>
-          <th>Amount</th>
-        </thead>
-        <tbody id="tbody">
-          
-        </tbody>
-      </table>
-    </div>
-    
+  </div>
+</div>
     <canvas id="myChart"></canvas>
   </div>
 
+  
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-  <script src="index.js"></script>
+  <script src="./dist/bundle.js"></script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () =>
+    navigator.serviceWorker
+    .register('service-worker.js')
+    .then(reg => console.log('We found your service worker file!', reg))
+    );
+  }
+</script> 
 </body>
 </html>
+
+
+
+<!-- <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () =>
+    navigator.serviceWorker
+    .register('service-worker.js')
+    .then(reg => console.log('We found your service worker file!', reg))
+    );
+  }
+</script> -->

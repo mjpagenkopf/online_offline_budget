@@ -5,24 +5,24 @@ const FILES_TO_CACHE = [
   "/index.html",
   "/manifest.webmanifest",
   "/assets/css/styles.css",
-  "/assets/js/index.js",
-  "/icons/icon-192x192.png",
-  "/icons/icon-512x512.png",
+  "/dist/bundle.js",
+  "/dist/manifest.json",
+  "/assets/icons/icon-192x192.png",
+  "/assets/icons/icon-512x512.png",
   "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
   'https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css',
   "https://cdn.jsdelivr.net/npm/chart.js@2.8.0",
   "https://use.fontawesome.com/releases/v5.8.2/css/all.css",
 ];
 
-self.addEventListener(`install`, evt => {
-    evt.waitUntil(
-        caches.open(DATA_CACHE_NAME).then(cache => {
-            cache.addAll(["/api/transaction"]);
-        }),
-        caches.open(CACHE_NAME).then(() => {
-            cache.addAll(FILES_TO_CACHE).then(() => self.skipWaiting())
-        })
-    )
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => cache.addAll(FILES_TO_CACHE))
+      .then(self.skipWaiting())
+  );
 });
 
 self.addEventListener("activate", evt => {

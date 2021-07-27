@@ -1,6 +1,6 @@
 let transactions = [];
 let myChart;
-
+import { saveRecord } from '../../dist/bundle';
 fetch(`/api/transaction`)
     .then(response => {
         return response.json()
@@ -15,23 +15,23 @@ fetch(`/api/transaction`)
 
 function populateTotal() {
     // reduce transaction amounts to a single total value
-    const total = transactions.reduce(
+    let total = transactions.reduce(
         (total, t) => {
             return total + parseInt(t.value)
         },
         0);
 
-    const totalEl = document.querySelector(`#total`);
+    let totalEl = document.querySelector(`#total`);
     totalEl.textContent = total;
 }
 
 function populateTable() {
-    const tbody = document.querySelector('#tbody');
+    let tbody = document.querySelector('#tbody');
     tbody.innerHTML = '';
   
     transactions.forEach((transaction) => {
       // create and populate a table row
-      const tr = document.createElement('tr');
+      let tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${transaction.name}</td>
         <td>${transaction.value}</td>
@@ -43,17 +43,17 @@ function populateTable() {
 
   function populateChart() {
     // copy array and reverse it
-    const reversed = transactions.slice().reverse();
+    let reversed = transactions.slice().reverse();
     let sum = 0;
   
     // create date labels for chart
-    const labels = reversed.map((t) => {
-      const date = new Date(t.date);
+    let labels = reversed.map((t) => {
+      let date = new Date(t.date);
       return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
     });
   
     // create incremental values for chart
-    const data = reversed.map((t) => {
+    let data = reversed.map((t) => {
       sum += parseInt(t.value);
       return sum;
     });
@@ -63,7 +63,7 @@ function populateTable() {
         myChart.destroy();
     }
 
-    const ctx = document.getElementById(`my-chart`).getContext(`2d`);
+    let ctx = document.getElementById(`my-chart`).getContext(`2d`);
 
     myChart = new Chart(ctx, {
         type: `line`,
@@ -82,9 +82,9 @@ function populateTable() {
 }
 
 function sendTransaction(isAdding) {
-    const nameEl = document.querySelector(`#t-name`);
-    const amountEl = document.querySelector(`#t-amount`);
-    const errorEl = document.querySelector(`form .error`);
+    let nameEl = document.querySelector(`#t-name`);
+    let amountEl = document.querySelector(`#t-amount`);
+    let errorEl = document.querySelector(`form .error`);
 
     // validate form
     if (nameEl.value === `` || amountEl.value === ``) {
@@ -95,7 +95,7 @@ function sendTransaction(isAdding) {
     }
 
     // create record
-    const transaction = {
+    let transaction = {
         name: nameEl.value,
         value: amountEl.value,
         date: new Date().toISOString()
