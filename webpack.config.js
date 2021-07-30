@@ -1,10 +1,11 @@
 const path = require('path');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 
-  config = {
+const config = {
     mode: 'production',
     entry: {
-      main: path.resolve(__dirname, 'public/index.js',  
+      main: path.resolve(__dirname, 'public/index.js),
+    }  
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: '[name].[contenthash].js',
@@ -61,6 +62,7 @@ const WebpackPwaManifest = require('webpack-pwa-manifest');
               ]
           }),
         ],
-});
+     })
+};
 
 module.exports = config;
