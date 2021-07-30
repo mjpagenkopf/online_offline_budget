@@ -94,4 +94,4 @@ let saveRecord = (record) => {
   };
   
 //   // Listen for app coming back online
-window.addEventListener('online', checkDatabase);
+// window.addEventListener('online', checkDatabase);

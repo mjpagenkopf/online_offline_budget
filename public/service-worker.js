@@ -1,72 +1,78 @@
-const version = 1;
-const PRE_CACHE_NAME = `static-v${version}`;
-const RUNTIME = 'runtime';
-// const DATA_CACHE_NAME = "data-cache-v1";
-//if adding '/404.html' to the precache, the file must exist or the install event will fail
 const FILES_TO_CACHE = [
-  "/",
-  "/index.html",
-  "/assets/css/styles.css",
-  "/dist/bundle.js",
-  "/dist/manifest.json",
-  "/assets/icons/icon-192x192.png",
-  "/assets/icons/icon-512x512.png",
-  "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
-  'https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css',
-  "https://cdn.jsdelivr.net/npm/chart.js@2.8.0",
-  "https://use.fontawesome.com/releases/v5.8.2/css/all.css",
-];
+    "/",
+    "/index.html",
+    "/assets/css/styles.css",
+    "/dist/assets/js/index.bundle.js",
+    "/dist/manifest.json",
+    "/dist/assets/icons/icon_72x72.png",
+    "/dist/assets/icons/icon_96x96.png",
+    "/dist/assets/icons/icon_128x128.png",
+    "/dist/assets/icons/icon_144x144.png",
+    "/dist/assets/icons/icon_152x152.png",
+    "/dist/assets/icons/icon_192x192.png",
+    "/dist/assets/icons/icon_384x384.png",
+    "/dist/assets/icons/icon_512x512.png"
+  ];
+  
+  const CACHE_NAME = "static-cache-v2";
+  const DATA_CACHE_NAME = "data-cache-v1";
 
-self.addEventListener('install', (evt) => {
-  evt.waitUntil(
-    caches
-      .open(PRE_CACHE_NAME)
-      .then((cache) => {
-          console.log('caching static files');
-          cache.addAll(FILES_TO_CACHE);
-      })
-        .then(self.skipWaiting())
-  );
-});
-
-self.addEventListener("activate", (evt) => {
+// install
+self.addEventListener("install", function (evt) {
     evt.waitUntil(
+      caches.open(CACHE_NAME).then((cache) => {
+        console.log("Your files were pre-cached successfully!");
+        return cache.addAll(FILES_TO_CACHE);
+      })
+    );
+  
+    self.skipWaiting();
+  });
+
+  self.addEventListener("activate", function (evt) {
+    evt.waitUntil(
+      caches.keys().then((keyList) => {
+        return Promise.all(
+          keyList.map((key) => {
+            if (key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
+              console.log("Removing old cache data", key);
+              return caches.delete(key);
+            }
+          })
+        );
+      })
+    );
+  
+    self.clients.claim();
+  });
+
+// fetch
+self.addEventListener("fetch", function (evt) {
+    // cache successful requests to the API
+    if (evt.request.url.includes("/api/")) {
+      evt.respondWith(
         caches
-        .keys()
-        .then((keys) => {
-            return Promise.all(
-                keys
-            .filter((key) => key !== PRE_CACHE_NAME)
-            .map((key) => caches.delete(key))
-            );
-        })
-        .catch(console.warn) //filter old
-    );
-});
-
-self.addEventListener(`fetch`, evt => {
-    if (
-        evt.request.method !== "GET" || !event.request.url.start
-
-    )
-    evt.respondWith(
-        caches.match(evt.request)
-        .then(cacheRes => {
-            return (
-                cacheRes ||
-                fetch(evt.request).then(
-                    (response) => {
-                        return response;
-                    },
-                    (err) => {
-                        console.log(err)
-
-                    }
-                )
-            )
-        })
-    );
-});
+          .open(DATA_CACHE_NAME)
+          .then((cache) => {
+            return fetch(evt.request)
+              .then((response) => {
+                // If the response was good, clone it and store it in the cache.
+                if (response.status === 200) {
+                  cache.put(evt.request.url, response.clone());
+                }
+  
+                return response;
+              })
+              .catch((err) => {
+                // Network request failed, try to get it from the cache.
+                return cache.match(evt.request);
+              });
+          })
+          .catch((err) => console.log(err))
+      );
+  
+      return;
+    }v
 
     if (evt.request.url.includes(`/api/transaction`)) {
         evt.respondWith(
@@ -80,20 +86,11 @@ self.addEventListener(`fetch`, evt => {
         return;
     }
 
-    evt.respondWith(
-        caches.match(evt.request).then(cachedResponse => {
-            if (cachedResponse) {
-                return cachedResponse;
-            }
-
-            return caches.open(DATA_CACHE_NAME).then(cache => {
-                return fetch(evt.request).then(response => {
-                    return cache.put(evt.request, response.clone()).then(() => {
-                    return response 
-                    // || fetch (evt.request))
-                });
-            });
-        });
-        })
-    );
+    // if the request is not for the API, serve static assets using "offline-first" approach.
+  // see https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook#cache-falling-back-to-network
+  evt.respondWith(
+    caches.match(evt.request).then(function (response) {
+      return response || fetch(evt.request);
+    })
+  );
 });
