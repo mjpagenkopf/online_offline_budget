@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/mjpagenkopf/online_offline_budget"
   },
-  "homepage": "https://git.heroku.com/guarded-reef-84373.git",
+  "homepage": "",
   "dependencies": {
     "compression": "^1.7.4",
     "express": "^4.17.1",
