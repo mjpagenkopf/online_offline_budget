@@ -16,8 +16,8 @@
           "sizes": "512x512"
         }
       ],
-      "name": "Budget-Tracker",
-      "short_name": "Budget-2-Go",
+      "name": "Budget Tracker",
+      "short_name": "Budget Tracker",
       "orientation": "portrait",
       "display": "standalone",
       "start_url": "/",

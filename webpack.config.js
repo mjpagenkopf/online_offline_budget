@@ -4,7 +4,7 @@ const WebpackPwaManifest = require('webpack-pwa-manifest');
 const config = {
     mode: 'production',
     entry: {
-      main: path.resolve(__dirname, 'public/index.js'),
+      main: path.resolve(__dirname, 'public/assets/js/index.js'),
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
