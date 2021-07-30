@@ -4,7 +4,7 @@ let budgetVersion;
 let request = indexedDB.open(`budgetDB`, 1);
 
 request.onupgradeneeded = function (e) {
-    console.log('Upgrade needed in IndexDB');
+    console.log('Upgrade needed in budgetDB');
   
     let { oldVersion } = e;
     let newVersion = e.newVersion || db.version;
@@ -30,7 +30,7 @@ request.onsuccess = event => {
 
 function checkDatabase() {
 
-    let transaction = db.transaction(['BudgetStore'], 'readwrite');
+let transaction = db.transaction(['BudgetStore'], 'readwrite');
 
   // access your BudgetStore object
   let store = transaction.objectStore('BudgetStore');
@@ -65,7 +65,7 @@ function checkDatabase() {
                     // save db data on global variable
                     transactions = data;
 
-    let();
+    // let();
                     populateTable();
                     populateChart();
                     })
@@ -94,3 +94,4 @@ let saveRecord = (record) => {
   };
   
 //   // Listen for app coming back online
+window.addEventListener('online', checkDatabase);
