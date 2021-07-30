@@ -1,9 +1,11 @@
-const CACHE_NAME = "static-cache-v2";
-const DATA_CACHE_NAME = "data-cache-v1";
+const version = 1;
+const PRE_CACHE_NAME = `static-v${version}`;
+const RUNTIME = 'runtime';
+// const DATA_CACHE_NAME = "data-cache-v1";
+//if adding '/404.html' to the precache, the file must exist or the install event will fail
 const FILES_TO_CACHE = [
   "/",
   "/index.html",
-  "/manifest.webmanifest",
   "/assets/css/styles.css",
   "/dist/bundle.js",
   "/dist/manifest.json",
@@ -15,40 +17,56 @@ const FILES_TO_CACHE = [
   "https://use.fontawesome.com/releases/v5.8.2/css/all.css",
 ];
 
-
-self.addEventListener('install', (event) => {
-  event.waitUntil(
+self.addEventListener('install', (evt) => {
+  evt.waitUntil(
     caches
-      .open(CACHE_NAME)
-      .then((cache) => cache.addAll(FILES_TO_CACHE))
-      .then(self.skipWaiting())
+      .open(PRE_CACHE_NAME)
+      .then((cache) => {
+          console.log('caching static files');
+          cache.addAll(FILES_TO_CACHE);
+      })
+        .then(self.skipWaiting())
   );
 });
 
-self.addEventListener("activate", evt => {
-    const currentCaches = [CACHE_NAME, DATA_CACHE_NAME];
+self.addEventListener("activate", (evt) => {
     evt.waitUntil(
-        caches.keys().then(cacheNames => {
-            return cacheNames.filter( //filter old
-            cacheName => !currentCaches.includes(cacheName)
-        );
-        }).then(cachesToDelete => {
-            return Promise.all( //deleting
-            cachesToDelete.map(cacheToDelete => {
-            return caches.delete(cacheToDelete)
-         }));
-    }).then(() => self.clients.claim())
+        caches
+        .keys()
+        .then((keys) => {
+            return Promise.all(
+                keys
+            .filter((key) => key !== PRE_CACHE_NAME)
+            .map((key) => caches.delete(key))
+            );
+        })
+        .catch(console.warn) //filter old
     );
 });
 
 self.addEventListener(`fetch`, evt => {
     if (
-        evt.request.method !== `GET` || 
-        !evt.request.url.startsWith(self.location.origin)
-    ) {
-        evt.respondWith(fetch(evt.request));
-        return;
-    }
+        evt.request.method !== "GET" || !event.request.url.start
+
+    )
+    evt.respondWith(
+        caches.match(evt.request)
+        .then(cacheRes => {
+            return (
+                cacheRes ||
+                fetch(evt.request).then(
+                    (response) => {
+                        return response;
+                    },
+                    (err) => {
+                        console.log(err)
+
+                    }
+                )
+            )
+        })
+    );
+});
 
     if (evt.request.url.includes(`/api/transaction`)) {
         evt.respondWith(
