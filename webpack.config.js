@@ -4,8 +4,8 @@ const WebpackPwaManifest = require('webpack-pwa-manifest');
 const config = {
     mode: 'production',
     entry: {
-      main: path.resolve(__dirname, 'public/index.js),
-    }  
+      main: path.resolve(__dirname, 'public/index.js'),
+    },
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: '[name].[contenthash].js',
@@ -24,7 +24,7 @@ const config = {
       module: {
         rules: [
           //css
-              { test: /\.css$/, use: ['style-loader', css-loader'] },
+              { test: /\.css$/, use: ['style-loader', 'css-loader'] },
               //images
               { test: /\.(svg|ico|png|webp|jpg|gif|jpeg)$/, type: 'assist/resource' },
               //js for babel
@@ -62,7 +62,7 @@ const config = {
               ]
           }),
         ],
-     })
-};
+     }
+
 
 module.exports = config;
